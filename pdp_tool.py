@@ -4,6 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def pdp(df, features, yname, n=4, writefolder=None, digits=2, figsize=(8,6)):
+  
+  assert isinstance(yname, str), 'Print yname must be a string. Unique column.'
 
   for feature in features:
     
