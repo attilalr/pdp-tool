@@ -3,7 +3,7 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 
-def pdp(df, features, yname, n=4, writefolder=None, digits=2, figsize=(8,6)):
+def pdp(df, features, yname, n=4, writefolder=None, digits=2, showbincount=True, figsize=(8,6)):
   
   assert isinstance(yname, str), 'Print yname must be a string. Unique column.'
 
@@ -62,12 +62,13 @@ def pdp(df, features, yname, n=4, writefolder=None, digits=2, figsize=(8,6)):
           #ax1.fill_between(bins_pos[:-1], v_mean + v_std, v_mean - v_std, alpha=0.1, color='b')
           ax1.fill_between(bin_pos_label, v_mean + v_std, v_mean - v_std, alpha=0.1, color='b')
 
-          color = 'tab:red'
-          ax2 = ax1.twinx()
-          ax2.plot(bin_pos_label, hist, 'o--', label='bin count', color=color)
-          #ax2.bar(bin_pos_label, hist, label='bin count', color=color)
-          ax2.set_ylim([0, hist.max()*1.2])
-          ax2.set_ylabel('bin_count', color=color)
+          if showbincount:
+            color = 'tab:red'
+            ax2 = ax1.twinx()
+            ax2.plot(bin_pos_label, hist, 'o--', label='bin count', color=color)
+            #ax2.bar(bin_pos_label, hist, label='bin count', color=color)
+            ax2.set_ylim([0, hist.max()*1.2])
+            ax2.set_ylabel('bin_count', color=color)
 
           if writefolder:
             feature_ = feature.replace(' ', '_')
@@ -101,11 +102,12 @@ def pdp(df, features, yname, n=4, writefolder=None, digits=2, figsize=(8,6)):
           ax1.plot(bins_pos, v_mean, 'o-', label='mean '+yname)
           ax1.fill_between(bins_pos, v_mean + v_std, v_mean - v_std, alpha=0.1, color='b')
 
-          color = 'tab:red'
-          ax2 = ax1.twinx()
-          ax2.plot(bins_pos, hist, 'o--', label='bin count', color=color)
-          ax2.set_ylim([0, np.array(hist).max()*1.2])
-          ax2.set_ylabel('bin_count', color=color)
+          if showbincount:
+            color = 'tab:red'
+            ax2 = ax1.twinx()
+            ax2.plot(bins_pos, hist, 'o--', label='bin count', color=color)
+            ax2.set_ylim([0, np.array(hist).max()*1.2])
+            ax2.set_ylabel('bin_count', color=color)
 
           if writefolder:
             plt.savefig(writefolder+'/pdp_feature_'+feature_string+'_y_'+yname_string+'.png')
