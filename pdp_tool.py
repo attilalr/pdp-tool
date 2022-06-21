@@ -3,7 +3,7 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 
-def pdp(df, features, yname, n=4, writefolder=None, digits=2, showbincount=True, figsize=(8,6)):
+def pdp(df, features, yname, n=4, writefolder=None, digits=2, figsize=(8,6), showbincount=True, ylim_origin=True):
   
   assert isinstance(yname, str), 'Print yname must be a string. Unique column.'
 
@@ -94,10 +94,10 @@ def pdp(df, features, yname, n=4, writefolder=None, digits=2, showbincount=True,
           fig, ax1 = plt.subplots(figsize=figsize)
           ax1.set_xlabel(feature)
           ax1.set_ylabel('mean '+yname)
-          try:
+          if ylim_origin:
             ax1.set_ylim([0,(v_mean+v_std).max()*1.05])
-          except:
-            print ('erro INF ou NaN na feature {}'.format(feature))
+          else:
+            ax1.set_ylim([(v_mean-v_std).min()*0.95,(v_mean+v_std).max()*1.05])
           ax1.set_xticks(bins_pos)
           ax1.plot(bins_pos, v_mean, 'o-', label='mean '+yname)
           ax1.fill_between(bins_pos, v_mean + v_std, v_mean - v_std, alpha=0.1, color='b')
