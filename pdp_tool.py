@@ -11,6 +11,10 @@ def pdp(df, features, yname, n=4, writefolder=None, digits=2, figsize=(8,6), sho
     
     if feature != yname:
 
+        if feature not in df.columns:
+            print (f'feature {feature} not in df.')
+            continue
+
         replace_list = ['/', '\\', ' ', '(', ')']
 
         feature_string = str(feature)
