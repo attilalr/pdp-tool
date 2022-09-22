@@ -3,7 +3,10 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 
-def pdp(df, features, yname, n=4, writefolder=None, digits=2, figsize=(8,6), showbincount=True, ylim_origin=True):
+def pdp(df, features, yname, n=4, 
+        writefolder=None, digits=2, figsize=(8,6), 
+        showbincount=True, ylim_origin=True,
+        even_spaced_ticks=False):
   
   assert isinstance(yname, str), 'Print yname must be a string. Unique column.'
 
@@ -50,7 +53,10 @@ def pdp(df, features, yname, n=4, writefolder=None, digits=2, figsize=(8,6), sho
               xtickslabel.append('['+'{number:.{digits}f}'.format(number=bins_pos[i], digits=digits)+'-'+'{number:.{digits}f}'.format(number=bins_pos[i+1], digits=digits)+'[')
               v_mean.append(v.mean())
               v_std.append(v.std())
-              bin_pos_label.append((bins_pos[i]+bins_pos[i+1])/2)
+              if even_spaced_ticks:
+                bin_pos_label.append((bins_pos[i]+bins_pos[i+1])/2)
+              else:
+                bin_pos_label.append(i)
 
           v_mean = np.array(v_mean)
           v_std = np.array(v_std)/np.sqrt(hist)
