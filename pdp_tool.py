@@ -8,8 +8,9 @@ def pdp(df, features, yname, n=4,
         showbincount=True, ylim_origin=True,
         even_spaced_ticks=False):
   
-  assert isinstance(yname, str), f'yname must be a string. Unique column.'
+  assert isinstance(yname, str), 'yname must be a string. Unique column.'
   assert yname in df.columns, 'yname column is not in the dataframe.'
+  assert isinstance(features, list), 'features must be a list. If single feature use [feature].'
 
   for feature in features:
     
