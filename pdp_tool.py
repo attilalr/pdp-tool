@@ -37,6 +37,10 @@ def pdp(df, features, yname, n=4,
           df_temp = df[[feature, yname]].dropna()
 
           bins_pos = np.percentile(df_temp[feature].values, np.linspace(0,100,n+1))
+          bins_pos = np.unique(bins_pos)
+          if len(bins_pos) < 2:
+            print(f'feature {feature} skipped due to insufficient bin separation.')
+            continue
         except:
           print ('feature {} with problems.'.format(feature))
           continue
