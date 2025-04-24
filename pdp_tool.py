@@ -35,12 +35,23 @@ def pdp(df, features, yname, n=4,
         try:
           #df_temp = df[~np.isnan(df[feature])][[feature, yname]]
           df_temp = df[[feature, yname]].dropna()
+          
+          if np.all(df_temp[feature].values == df_temp[feature].values[0]):
+            print(f'[SKIPPED] Feature {feature} has all identical values.')
+            continue
 
           bins_pos = np.percentile(df_temp[feature].values, np.linspace(0,100,n+1))
           bins_pos = np.unique(bins_pos)
-          if len(bins_pos) < 2:
+         
+          while len(bins_pos) <= 2 and n > 1:
+            n -= 1
+            bins_pos = np.percentile(df_temp[feature].values, np.linspace(0, 100, n + 1))
+            bins_pos = np.unique(bins_pos)
+
+          if len(bins_pos) <= 2:
             print(f'feature {feature} skipped due to insufficient bin separation.')
             continue
+
         except:
           print ('feature {} with problems.'.format(feature))
           continue
@@ -63,6 +74,10 @@ def pdp(df, features, yname, n=4,
                 bin_pos_label.append((bins_pos[i]+bins_pos[i+1])/2)
               else:
                 bin_pos_label.append(i)
+
+          if not v_mean:
+            print(f'[SKIPPED] Feature "{feature}" has no valid bins.')
+            continue
 
           v_mean = np.array(v_mean)
           v_std = np.array(v_std)/np.sqrt(hist)
